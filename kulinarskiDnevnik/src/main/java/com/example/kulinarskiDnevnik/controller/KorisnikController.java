@@ -183,7 +183,10 @@ public class KorisnikController {
 	
 	@RequestMapping(value="dodavanjeSastojka", method=RequestMethod.GET)
 	public String dodavanjeSastojaka(HttpServletRequest request, Model m, RedirectAttributes redirectAttributes) {
-		
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute("user");
+		if(korisnik==null) {
+			return "login";
+		}
 		if(!request.getParameter("sastojak").equals("") && !request.getParameter("kolicina").equals("")) {
 			Sastojak s = new Sastojak();
 			s.setSastojak(request.getParameter("sastojak"));
@@ -198,6 +201,7 @@ public class KorisnikController {
 	
 	@RequestMapping(value="dodavanjeRecepta", method=RequestMethod.POST)
 	public String dodavanjeRecepta(HttpServletRequest request, @RequestParam("slike") MultipartFile[] slike, Model m) {
+		
 		String nazivRecepta = request.getParameter("nazivRecepta");
 		String nacinPripreme = request.getParameter("nacinPripreme");
 		int kategorija = Integer.parseInt(request.getParameter("kategorija"));
@@ -268,18 +272,25 @@ public class KorisnikController {
 	}
 	@RequestMapping(value="posaljiZahtev")
 	public String posaljiZahtev(@RequestParam("idKorisnik") int idKorisnik,HttpServletRequest request, Model m) {
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute("user");
+		if(korisnik==null) {
+			return "login";
+		}
 		Zahtev zahtev = new Zahtev();
 		zahtev.setDatum(new Date());
 		zahtev.setKorisnik1(korisnikRepo.getOne(idKorisnik));
 		zahtev.setKorisnik2((Korisnik)request.getSession().getAttribute("user"));
 		zahtev.setStatus("cekanje");
 		zahtevRepo.save(zahtev);
-		return null;
+		return "redirect:/korisnik/index";
 	}
 	
 	@RequestMapping(value="prikazZahteva")
 	public String prikazZahteva(HttpServletRequest request, Model m) {
 		Korisnik korisnik = (Korisnik) request.getSession().getAttribute("user");
+		if(korisnik==null) {
+			return "login";
+		}
 		List<Zahtev> zahtevi = zahtevRepo.findByKorisnik1(korisnik);
 		m.addAttribute("zahteviKorisnika", zahtevi);
 		return "prikazZahteva";
@@ -296,6 +307,9 @@ public class KorisnikController {
 	@RequestMapping(value="posaljiPoruku")
 	public String formaPoruke(@RequestParam("idKorisnik") int idKorisnikPr, HttpServletRequest request, Model m) {
 		Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
+		if(ulogovan==null) {
+			return "login";
+		}
 		List<Poruka> poruke = porukaRepo.svePorukeKorisnika(idKorisnikPr, ulogovan.getIdKorisnik()); 
 		for(Poruka p:poruke) {
 			if(p.getKorisnik2().getIdKorisnik()==ulogovan.getIdKorisnik()) {
@@ -312,6 +326,9 @@ public class KorisnikController {
 	@RequestMapping(value="posaljiPoruku", method=RequestMethod.POST)
 	public String posaljiPoruku(@RequestParam("idKorisnik")int idKorisnika, HttpServletRequest request, Model m) {
 		Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
+		if(ulogovan==null) {
+			return "login";
+		}
 		String text = request.getParameter("text");
 		Poruka p = new Poruka();
 		p.setDatumSlanja(new Date());
@@ -326,6 +343,9 @@ public class KorisnikController {
 	@RequestMapping(value="pregledPrijatelja", method=RequestMethod.GET)
 	public String pregledPrijatelja(HttpServletRequest request, Model m) {
 		Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
+		if(ulogovan==null) {
+			return "login";
+		}
 		List<Zahtev> prijatelji = zahtevRepo.prijateljiKorisnika(ulogovan);
 		m.addAttribute("prijatelji", prijatelji);
 		return "pregledPrijatelja";
@@ -334,6 +354,9 @@ public class KorisnikController {
 	@RequestMapping(value="neprocitanePoruke", method=RequestMethod.GET)
 	public String neprocitanePoruke(HttpServletRequest request, Model m) {
 		Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
+		if(ulogovan==null) {
+			return "login";
+		}
 		List<Poruka> neprocitane = porukaRepo.neprocitanePorukeKorisnika(ulogovan.getIdKorisnik());
 		m.addAttribute("neprocitane", neprocitane);
 		return "neprocitanePoruke";
@@ -341,9 +364,11 @@ public class KorisnikController {
 	
 	@RequestMapping(value="dodajUOmiljene", method=RequestMethod.POST)
 	public String dodajUOmiljene(@RequestParam("idRecepta")int idRecepta, HttpServletRequest request, Model m) {
+
 		Recept recept = receptRepo.getOne(idRecepta);
 		String kat = request.getParameter("kat");
 		Omiljenakat kateg = null;
+		
 		if(kat.equals("-1")) {
 			kat = request.getParameter("omkateg");
 			if(!kat.equals("") && !kat.equals(" ")){
@@ -359,6 +384,7 @@ public class KorisnikController {
 				
 			}else {
 				m.addAttribute("msg1", "Morate izabrati omiljenu kategoriju");
+				return "redirect:/korisnik/prikazRecepta/"+idRecepta;
 			}
 		}else {
 			kateg = omiljenakatRepo.getOne(Integer.parseInt(request.getParameter("kat")));
