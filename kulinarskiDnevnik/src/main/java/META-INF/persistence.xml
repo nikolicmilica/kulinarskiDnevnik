@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="kulinarskiDnevnik">
+		<class>com.example.kulinarskiDnevnik.model.Kategorija</class>
+		<class>com.example.kulinarskiDnevnik.model.Korisnik</class>
+		<class>com.example.kulinarskiDnevnik.model.Omiljenakat</class>
+		<class>com.example.kulinarskiDnevnik.model.Omiljenirecept</class>
+		<class>com.example.kulinarskiDnevnik.model.Poruka</class>
+		<class>com.example.kulinarskiDnevnik.model.Recept</class>
+		<class>com.example.kulinarskiDnevnik.model.Sastojak</class>
+		<class>com.example.kulinarskiDnevnik.model.Slika</class>
+		<class>com.example.kulinarskiDnevnik.model.Ulogakorisnika</class>
+		<class>com.example.kulinarskiDnevnik.model.Zahtev</class>
+	</persistence-unit>
+</persistence>
