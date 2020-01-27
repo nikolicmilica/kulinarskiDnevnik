@@ -5,19 +5,50 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<title>Pocetna</title>
 </head>
 <body>
-Hello you<c:if test="${not empty user }">, ${user.username }
-<a href="/korisnik/dodavanjeRecepta">Dodaj recept</a>
-<a href="/korisnik/prikazZahteva">Zahtevi na cekanju</a>
-<a href="/korisnik/pregledPrijatelja">Moji prijatelji</a>
-<a href="/korisnik/neprocitanePoruke">Neprocitane poruke</a>
-<a style="text-align: right;"  href="/korisnik/odjava">Odjavi se</a>
-</c:if><br>
+
+<c:if test="${not empty user and user.ulogakorisnika.idUloga==2}">
+<ul class="nav justify-content-center">
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/dodavanjeRecepta">Dodaj recept</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/prikazZahteva">Zahtevi na cekanju</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/pregledPrijatelja">Moji prijatelji</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/neprocitanePoruke">Neprocitane poruke</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/odjava">Odjavi se</a>
+</li>
+</ul>
+</c:if>
+<c:if test="${not empty user and user.ulogakorisnika.idUloga==1}">
+<ul class="nav justify-content-center">
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/dodajKategorijuForma" >Dodaj kategoriju</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/odjava">Odjavi se</a>
+</li>
+</ul>
+</c:if>
+<br>
 <c:if test="${empty user }">
-<a href="/korisnik/loginForm">Login</a>
-<a href="/korisnik/signUpForm">SignUp</a>
+<ul class="nav justify-content-end">
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/loginForm">Login</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/korisnik/signUpForm">SignUp</a>
+</li>
+</ul>
 </c:if>
 <br>
 <c:if test="${not empty msg }">
@@ -26,10 +57,14 @@ Hello you<c:if test="${not empty user }">, ${user.username }
 <c:if test="${not empty msgPor }">
 <p>${msgPor }</p>
 </c:if>
+<c:if test="${not empty porukaAdmin }">
+<p>${porukaAdmin }</p>
+</c:if>
 <c:if test="${not empty recepti }">
 <c:forEach var="r" items="${recepti }" varStatus="status">
 <h2><a href="/korisnik/prikazRecepta/${r.idRecept}"> ${r.naziv }</a></h2>
-<img alt="" src="<c:out value="/korisnik/vratiPocetnuSliku/?id=${r.idRecept }"/>" style="max-width: 300px; max-height: 300px;">
+
+<img alt="" src="<c:out value="/korisnik/vratiPocetnuSliku/?id=${r.idRecept }"/>" style="max-width: 300px; max-height: 300px;" class="img-thumbnail">
 <p>Postavljeno: ${r.datumPostavke }</p>
 <p>Kategorija: ${r.kategorijaBean.nazivKategorije }</p>
 <p>Korisnika: ${r.korisnikBean.username }
@@ -44,13 +79,14 @@ Hello you<c:if test="${not empty user }">, ${user.username }
 <a href="/korisnik/posaljiPoruku/?idKorisnik=${r.korisnikBean.idKorisnik  }">Posalji poruku</a>
 </c:if>
 </c:if>
-</p> 
-
+ 
+<br>
+<br>
+<br>
 <br>
 <br>
 </c:forEach>
 </c:if>
 <br>
-
 </body>
 </html>

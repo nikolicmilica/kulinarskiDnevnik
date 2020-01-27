@@ -5,14 +5,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <title>Insert title here</title>
 </head>
 <body>
 <c:if test="${not empty poruke }">
+<div>
 <c:forEach var="p" items="${poruke }">
 ${p.korisnik1.username }  ${p.datumSlanja }<br>
 ${p.text }<br> 
 </c:forEach>
+</div>
 </c:if>
 <form action="/korisnik/posaljiPoruku/?idKorisnik=${korisnik }" method="post">
 <input type="text" name="text">

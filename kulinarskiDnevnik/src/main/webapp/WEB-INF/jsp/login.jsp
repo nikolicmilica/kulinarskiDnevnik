@@ -5,20 +5,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<title>Login</title>
 </head>
 <body>
 <c:if test="${not empty msgreg}">
 	<p>${msgreg}</p>
 </c:if>
+<div style=" width:30%; margin: auto; margin-top:10%;">
 <form action="/korisnik/login" method="get">
-
-	<input type="text" name="username" placeholder="Username"><br>							
-	<input type="password" name="password" placeholder="Password"><br>
+<table>
+<tr>
+	<td>Username:</td><td><input type="text" name="username"></td>
+</tr>
+<tr>							
+	<td>Password:</td><td><input type="password" name="password"></td>
+</tr>
+<tr>
+	<td><input type="submit" class="btn btn-primary" value="Uloguj se"/></td>
+</tr>
 	<c:if test="${not empty message}">
 	<p>${message}</p>
 	</c:if>
-	<button type="submit"><i class="fa fa-sign-in"></i> Uloguj se</button>			
+</table>		
 </form>
+</div>
 </body>
 </html>

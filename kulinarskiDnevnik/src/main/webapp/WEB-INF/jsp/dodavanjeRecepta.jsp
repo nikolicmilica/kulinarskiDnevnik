@@ -5,28 +5,44 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <title>Insert title here</title>
 </head>
 <body>
 <c:if test="${not empty msg }">${msg }</c:if>
-
+<div style=" width:30%; margin: auto; margin-top:10%;">
 <form action="/korisnik/dodavanjeSastojka" method="get">
-Sastojak:<input type="text" name="sastojak"><br>
-Kolicina:<input type="text" name="kolicina"><br>
-<input type="submit" value="Dodaj sastojak"><br>
+<table>
+<tr>
+<td>Sastojak:</td><td><input type="text" name="sastojak"></td>
+</tr>
+<tr>
+<td>Kolicina:</td><td><input type="text" name="kolicina"></td>
+</tr>
+<tr>
+<td><input type="submit" value="Dodaj sastojak"></td>
+</tr>
+</table>
 </form>
-
+<br>
 <form action="/korisnik/dodavanjeRecepta" method="post" enctype="multipart/form-data">
-Naziv recepta:<input type="text" name="nazivRecepta"><br>
-Nacin pripreme:<input type="textarea" name="nacinPripreme"><br>
+<table>
+<tr>
+<td>Naziv recepta:</td><td><input type="text" name="nazivRecepta"></td>
+</tr>
+<tr>
+<td>Nacin pripreme:</td><td><input type="textarea" name="nacinPripreme"></td>
+</tr>
+<tr>
 <select name="kategorija">
 <option value="-1">Izaberi kategoriju</option>
 <c:forEach var="k" items="${kategorije }">
 <option value="${k.idKategorija }">${k.nazivKategorije }</option>
 </c:forEach>
-</select><br>
+</select>
+</tr>
 <c:if test="${not empty sastojci }">
-<table border="1">
+<table>
 <c:forEach var="s" items="${sastojci}">
 <tr>
 <td>${s.sastojak }</td><td>${s.kolicina }</td>
@@ -34,9 +50,14 @@ Nacin pripreme:<input type="textarea" name="nacinPripreme"><br>
 </c:forEach>
 </table>
 </c:if>
-<input type="file" name="slike" multiple>
-<input type="submit" value="Dodaj recept">
+<tr>
+<td><input type="file" name="slike" multiple></td>
+</tr>
+<tr>
+<td><input type="submit" value="Dodaj recept"></td>
+</tr>
+</table>
 </form>
-
+</div>
 </body>
 </html>

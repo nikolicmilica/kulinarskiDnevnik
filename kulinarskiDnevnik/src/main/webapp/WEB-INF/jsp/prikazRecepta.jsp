@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <title>Insert title here</title>
 </head>
 <body>
@@ -16,7 +17,7 @@
 </c:forEach>
 
 <h2>Sastojci</h2>
-<table border="1">
+<table class="table" style="width:30%;">
 <c:forEach var="s" items="${recept.sastojaks }">
 <tr>
 <td>${ s.sastojak}</td><td> ${s.kolicina }</td>

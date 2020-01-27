@@ -201,7 +201,8 @@ public class KorisnikController {
 	
 	@RequestMapping(value="dodavanjeRecepta", method=RequestMethod.POST)
 	public String dodavanjeRecepta(HttpServletRequest request, @RequestParam("slike") MultipartFile[] slike, Model m) {
-		
+		if(request.getSession().getAttribute("user")==null)
+			return "redirect:/korisnik/loginForm";
 		String nazivRecepta = request.getParameter("nazivRecepta");
 		String nacinPripreme = request.getParameter("nacinPripreme");
 		int kategorija = Integer.parseInt(request.getParameter("kategorija"));
@@ -298,6 +299,8 @@ public class KorisnikController {
 	
 	@RequestMapping(value="prihvatiZahtev")
 	public String prihvatiZahtev(@RequestParam("idZahtev") int idZahtev, HttpServletRequest request, Model m) {
+		if(request.getSession().getAttribute("user")==null)
+			return "redirect:/korisnik/loginForm";
 		Zahtev zahtev = zahtevRepo.getOne(idZahtev);
 		zahtev.setStatus("prihvacen");
 		zahtev.setDatum(new Date());
@@ -354,7 +357,7 @@ public class KorisnikController {
 	@RequestMapping(value="neprocitanePoruke", method=RequestMethod.GET)
 	public String neprocitanePoruke(HttpServletRequest request, Model m) {
 		Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
-		if(ulogovan==null) {
+		if(ulogovan==null ) {
 			return "login";
 		}
 		List<Poruka> neprocitane = porukaRepo.neprocitanePorukeKorisnika(ulogovan.getIdKorisnik());
@@ -364,7 +367,8 @@ public class KorisnikController {
 	
 	@RequestMapping(value="dodajUOmiljene", method=RequestMethod.POST)
 	public String dodajUOmiljene(@RequestParam("idRecepta")int idRecepta, HttpServletRequest request, Model m) {
-
+		if(request.getSession().getAttribute("user")==null )
+			return "redirect:/korisnik/loginForm";
 		Recept recept = receptRepo.getOne(idRecepta);
 		String kat = request.getParameter("kat");
 		Omiljenakat kateg = null;
@@ -384,7 +388,6 @@ public class KorisnikController {
 				
 			}else {
 				m.addAttribute("msg1", "Morate izabrati omiljenu kategoriju");
-				return "redirect:/korisnik/prikazRecepta/"+idRecepta;
 			}
 		}else {
 			kateg = omiljenakatRepo.getOne(Integer.parseInt(request.getParameter("kat")));
@@ -397,4 +400,30 @@ public class KorisnikController {
 		
 		return "redirect:/korisnik/prikazRecepta/"+idRecepta;
 	}
+	@RequestMapping(value="dodajKategoriju", method=RequestMethod.POST)
+	public String dodajKategoriju(HttpServletRequest request, Model m) {
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute("user");
+		if(korisnik!=null && korisnik.getUlogakorisnika().getNazivUloge().equals("admin")) {
+			String nazivkat = request.getParameter("naziv");
+			Kategorija k = new Kategorija();
+			k.setNazivKategorije(nazivkat);
+			kategorijaRepo.save(k);
+			return "redirect:/korisnik/index";
+		}else {
+			m.addAttribute("porukaAdmin", "Niste admin ne mozete dodavati kategoriju");
+			return "redirect:/korisnik/index";
+		}
+	}
+	
+	@RequestMapping(value="dodajKategorijuForma", method=RequestMethod.GET)
+	public String dodajKategorijuForma(HttpServletRequest request, Model m) {
+		Korisnik korisnik = (Korisnik) request.getSession().getAttribute("user");
+		if(korisnik!=null && korisnik.getUlogakorisnika().getNazivUloge().equals("admin")) {
+			return "dodajKategoriju";
+		}else {
+			m.addAttribute("porukaAdmin", "Niste admin ne mozete dodavati kategoriju");
+			return "redirect:/korisnik/index";
+		}
+	}
+	
 }
